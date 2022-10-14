@@ -72,8 +72,8 @@ import random
 yard_meter = float(0.9144)
 feet_meter = float(0.3048)
 inch_meter = float(0.0254)
-#Funktion som sätter värdet på faktorn beroende på vilken enhet som användaren vill ha.
-def printtable():
+#Funktion som sätter värdet på faktorn beroende på vilken enhet som användaren vill ha och printar tabellen.
+def printtable(chosen_unit, i):
 	print("=============")
 	print("Table of " + chosen_unit)
 	print("=============")
@@ -89,41 +89,49 @@ def printtable():
 	#printar tabellen
 	for t in range(1, i+1):
 		print(unit_meter*t, chosen_unit)
+		break
 
 unit_list = ["yard", "feet", "inch"] 
 
+#Frågar användaren vilken längdenhet och hur många produkter hen vill ha i tabellen och åkallar printtable funktionen.
 def unit_table():
 	while True:
-		#Frågar användaren vilken längdenhet och hur många produkter hen vill ha i tabellen.
 		chosen_unit = str(input("Would you like to see the table for yard, feet or inch?: "))
 		i =	int(input("How many products do you want?: "))
 		#kollar om enheten finns i listan
 		if chosen_unit.lower() in unit_list:
-			printtable()
+			printtable(chosen_unit, i)
 		else:
 			print("Chosen unit not found.")
 
-
+#skapar en slumpmässig int mellan 0 och 10, konverterar det till den valda enheten och låter sedan användaren svara, är svaret inom 10% felmarginal är svaret rätt.
 def guessing_game():
 	chosen_unit = str(input("What unit would you like to guess? Yard, feet or inch?: "))
-	if chosen_unit == "yard":
-		unit_meter = yard_meter
-
-	elif chosen_unit == "feet":
-		unit_meter = feet_meter
-	else:
-		unit_meter = inch_meter
 	tries = 1
 	i = random.randint(0, 10)
 	while True:
 		print("What is", i,"meters in", chosen_unit, "?: ")
-		guess = float(input())
-		if guess < i*0.9*unit_meter or guess > i*1.1*unit_meter:
-			print("Nope, try again!")
-			tries += 1
+		if chosen_unit == "yard":
+			unit_meter = yard_meter
+
+		elif chosen_unit == "feet":
+			unit_meter = feet_meter
 		else:
-			print("Right answer! It took", tries, "tries!")
-			break 
+			unit_meter = inch_meter
+
+		guess = float(input())
+		try:
+			if guess < (i*unit_meter*0.9) and guess > (i*unit_meter*1.1):
+				print("Nope, try again!")
+				tries += 1
+			else:
+				print("Right answer! It took", tries, "tries!")
+				break 
+				
+		except: 
+			print("Wrong datatype!")
+
+#Frågar användaren om vilket program hen vill använda.
 while True:
 	program = str(input("Would you like to see the unit table or the guessing game?: "))
 	if program.lower() == "unit table":
@@ -132,3 +140,7 @@ while True:
 		guessing_game()
 	else:
 		print("Please enter guessing game or unit table")
+
+"""
+Vi har testat att köra programmet och hittade inga buggar.
+"""
